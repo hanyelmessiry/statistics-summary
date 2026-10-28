@@ -13,7 +13,7 @@ function toEnglishNumbers(str) {
     return digitsOnly === '' ? '0' : digitsOnly;
 }
 
-// البيانات الافتراضية (بدون صفوف أولية، الاعتماد على صف رقم مسلسل والأعمدة)
+// البيانات الافتراضية
 const defaultData = {
     'جزئي': { title: 'المدني الجزئي', customSh: [], customIth: [], customWaqf: [], serialVals: {moajal:0, shatb:0, mawdoui:0, sh:[0,0,0,0], customShVals:[], ith:[0,0,0,0], customIthVals:[], waqf:0, customWaqfVals:[]}, rows: [] },
     'حكومة': { title: 'مدني الحكومة', customSh: [], customIth: [], customWaqf: [], serialVals: {moajal:0, shatb:0, mawdoui:0, sh:[0,0,0,0], customShVals:[], ith:[0,0,0,0], customIthVals:[], waqf:0, customWaqfVals:[]}, rows: [] },
@@ -21,11 +21,11 @@ const defaultData = {
     'تنفيذ': { title: 'مدني تنفيذ', customSh: [], customIth: [], customWaqf: [], serialVals: {moajal:0, shatb:0, mawdoui:0, sh:[0,0,0,0], customShVals:[], ith:[0,0,0,0], customIthVals:[], waqf:0, customWaqfVals:[]}, rows: [] }
 };
 
-let dataStore = JSON.parse(localStorage.getItem('court_stats_data_v8')) || defaultData;
+let dataStore = JSON.parse(localStorage.getItem('court_stats_data_v9')) || defaultData;
 let currentType = 'جزئي';
 
 function saveData() {
-    localStorage.setItem('court_stats_data_v8', JSON.stringify(dataStore));
+    localStorage.setItem('court_stats_data_v9', JSON.stringify(dataStore));
 }
 
 function switchType(type) {
@@ -87,7 +87,7 @@ function goToFinalStats() {
 
 function resetAllData() {
     if (confirm("هل أنت متأكد من إزالة جميع الإحصائيات والبيانات لكافة الأقسام؟")) {
-        localStorage.removeItem('court_stats_data_v8');
+        localStorage.removeItem('court_stats_data_v9');
         dataStore = JSON.parse(JSON.stringify(defaultData));
         currentType = 'جزئي';
         document.getElementById('menu-toggle').checked = false;
@@ -213,7 +213,7 @@ function renderTable() {
     let ithbatColSpan = 4 + customIth.length;
     ithbatHeaderContainer.setAttribute('colspan', ithbatColSpan);
     
-    // بناء الهيدر الفرعي مع أزرار الإضافة الشفافة البيضاء بجوار "تعليقي" و "يمين"
+    // بناء الهيدر الفرعي
     let subHeaderHTML = `
         <th>اختصاص</th><th>قبول</th><th>اعتبار</th>
         <th>
@@ -236,10 +236,9 @@ function renderTable() {
     });
     subHeaderRow.innerHTML = subHeaderHTML;
 
-    // زر الإضافة بجوار وقف جزاء بخلفية شفافة ولون أبيض
     waqfExtraContainer.innerHTML = `<button class="add-col-btn" onclick="addCustomColumn('waqf')" title="إضافة عمود جديد" style="background: transparent; color: white; border: none; cursor: pointer; font-size: 16px;">+</button>`;
 
-    // --- توليد خلايا صف "رقم مسلسل" ---
+    // --- 1. توليد صف "رقم مسلسل" للديسكتوب ---
     let sVals = section.serialVals;
     let serialHTML = `<td>رقم مسلسل</td>`;
     serialHTML += `<td><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(sVals.moajal)}" oninput="handleSerialInput(this, 'moajal')"></td>`;
@@ -267,7 +266,37 @@ function renderTable() {
     });
     serialRow.innerHTML = serialHTML;
 
-    // --- بناء صفوف البيانات العادية (إن وجدت) ---
+    // --- 2. بناء بطاقة "رقم مسلسل" للموبايل ---
+    let mobileSerialCard = document.createElement('div');
+    mobileSerialCard.className = 'vertical-card';
+    let mSerialHTML = `<h3>رقم مسلسل</h3><div class="record-grid">`;
+    mSerialHTML += `<div class="record-item"><label>مؤجل</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(sVals.moajal)}" oninput="handleSerialInput(this, 'moajal')"></div>`;
+    mSerialHTML += `<div class="record-item"><label>شطب</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(sVals.shatb)}" oninput="handleSerialInput(this, 'shatb')"></div>`;
+    mSerialHTML += `<div class="record-item"><label>موضوعي</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(sVals.mawdoui)}" oninput="handleSerialInput(this, 'mawdoui')"></div>`;
+    
+    const shakliLabels = ['اختصاص', 'قبول', 'اعتبار', 'تعليقي', ...customSh];
+    const shakliBase = [...sVals.sh, ...(sVals.customShVals || [])];
+    shakliLabels.forEach((lbl, idx) => {
+        mSerialHTML += `<div class="record-item"><label>${lbl}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(shakliBase[idx])}" oninput="updateMobileSerialShInput(this, ${idx})"></div>`;
+    });
+
+    const ithbatLabels = ['خبير', 'تحقيق', 'استجواب', 'يمين', ...customIth];
+    const ithbatBase = [...sVals.ith, ...(sVals.customIthVals || [])];
+    ithbatLabels.forEach((lbl, idx) => {
+        mSerialHTML += `<div class="record-item"><label>${lbl}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(ithbatBase[idx])}" oninput="updateMobileSerialIthInput(this, ${idx})"></div>`;
+    });
+
+    mSerialHTML += `<div class="record-item"><label>وقف جزاء</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(sVals.waqf)}" oninput="handleSerialInput(this, 'waqf')"></div>`;
+    customWaqf.forEach((wName, wIdx) => {
+        let val = sVals.customWaqfVals ? (sVals.customWaqfVals[wIdx] || 0) : 0;
+        mSerialHTML += `<div class="record-item"><label>${wName}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(val)}"></div>`;
+    });
+
+    mSerialHTML += `</div>`;
+    mobileSerialCard.innerHTML = mSerialHTML;
+    mobileContainer.appendChild(mobileSerialCard);
+
+    // --- 3. بناء صفوف البيانات الإضافية ---
     rows.forEach((row, index) => {
         const desktopTr = document.createElement('tr');
         let rowHTML = `
@@ -307,8 +336,93 @@ function renderTable() {
 
         desktopTr.innerHTML = rowHTML;
         desktopTbody.appendChild(desktopTr);
+
+        const mobileCard = document.createElement('div');
+        mobileCard.className = 'vertical-card';
+        let mCardHTML = `<h3>${row.name} <button class="delete-row-btn" onclick="removeRow(${index})" style="float:left;">✕</button></h3><div class="record-grid">`;
+        mCardHTML += `<div class="record-item"><label>مؤجل</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.moajal)}" oninput="handleInput(this, ${index}, 'moajal')"></div>`;
+        mCardHTML += `<div class="record-item"><label>شطب</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.shatb)}" oninput="handleInput(this, ${index}, 'shatb')"></div>`;
+        mCardHTML += `<div class="record-item"><label>موضوعي</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.mawdoui)}" oninput="handleInput(this, ${index}, 'mawdoui')"></div>`;
+        
+        shakliLabels.forEach((lbl, idx) => {
+            if(idx < 4) {
+                mCardHTML += `<div class="record-item"><label>${lbl}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.sh[idx])}" oninput="updateMobileSubInput(this, ${index}, 'sh', ${idx})"></div>`;
+            } else {
+                let cIdx = idx - 4;
+                mCardHTML += `<div class="record-item"><label>${lbl}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.customShVals[cIdx])}" oninput="updateMobileCustomShInput(this, ${index}, ${cIdx})"></div>`;
+            }
+        });
+
+        ithbatLabels.forEach((lbl, idx) => {
+            if(idx < 4) {
+                mCardHTML += `<div class="record-item"><label>${lbl}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.ith[idx])}" oninput="updateMobileSubInput(this, ${index}, 'ith', ${idx})"></div>`;
+            } else {
+                let cIdx = idx - 4;
+                mCardHTML += `<div class="record-item"><label>${lbl}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.customIthVals[cIdx])}" oninput="updateMobileCustomIthInput(this, ${index}, ${cIdx})"></div>`;
+            }
+        });
+
+        mCardHTML += `<div class="record-item"><label>وقف جزاء</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(row.waqf)}" oninput="handleInput(this, ${index}, 'waqf')"></div>`;
+        customWaqf.forEach((wName, wIdx) => {
+            let val = row.customWaqfVals ? (row.customWaqfVals[wIdx] || 0) : 0;
+            mCardHTML += `<div class="record-item"><label>${wName}</label><input type="text" inputmode="numeric" pattern="[0-9]*" value="${toArabicNumbers(val)}"></div>`;
+        });
+
+        mCardHTML += `</div>`;
+        mobileCard.innerHTML = mCardHTML;
+        mobileContainer.appendChild(mobileCard);
     });
 
+    recalculateAll();
+}
+
+function updateMobileSerialShInput(inputElem, idx) {
+    let val = parseInt(toEnglishNumbers(inputElem.value), 10) || 0;
+    let section = dataStore[currentType];
+    if(idx < 4) {
+        section.serialVals.sh[idx] = val;
+    } else {
+        section.serialVals.customShVals[idx - 4] = val;
+    }
+    inputElem.value = toArabicNumbers(val);
+    saveData();
+    recalculateAll();
+}
+
+function updateMobileSerialIthInput(inputElem, idx) {
+    let val = parseInt(toEnglishNumbers(inputElem.value), 10) || 0;
+    let section = dataStore[currentType];
+    if(idx < 4) {
+        section.serialVals.ith[idx] = val;
+    } else {
+        section.serialVals.customIthVals[idx - 4] = val;
+    }
+    inputElem.value = toArabicNumbers(val);
+    saveData();
+    recalculateAll();
+}
+
+function updateMobileSubInput(inputElem, index, field, subIndex) {
+    let val = parseInt(toEnglishNumbers(inputElem.value), 10) || 0;
+    dataStore[currentType].rows[index][field][subIndex] = val;
+    inputElem.value = toArabicNumbers(val);
+    saveData();
+    recalculateAll();
+}
+
+function updateMobileCustomShInput(inputElem, index, cIdx) {
+    let val = parseInt(toEnglishNumbers(inputElem.value), 10) || 0;
+    dataStore[currentType].rows[index].customShVals[cIdx] = val;
+    inputElem.value = toArabicNumbers(val);
+    saveData();
+    recalculateAll();
+}
+
+function updateMobileCustomIthInput(inputElem, index, cIdx) {
+    let val = parseInt(toEnglishNumbers(inputElem.value), 10) || 0;
+    dataStore[currentType].rows[index].customIthVals[cIdx] = val;
+    inputElem.value = toArabicNumbers(val);
+    saveData();
     recalculateAll();
 }
 
@@ -448,7 +562,7 @@ function handleCustomWaqfInput(inputElem, index, wIdx) {
     recalculateAll();
 }
 
-// دالة الحسابات والجمع التلقائي الشاملة (بدون كلمة مقدم في الصفوف المضافة)
+// دالة الحسابات والجمع التلقائي الشاملة
 function recalculateAll() {
     let overallMoqadam = 0, overallMoajal = 0, overallShatb = 0;
     let overallMawdoui = 0, overallShakli = 0, overallIthbat = 0, overallWaqf = 0, overallQataiSub = 0;
@@ -461,9 +575,8 @@ function recalculateAll() {
         let typeMoqadam = 0, typeMoajal = 0, typeShatb = 0, typeMawdoui = 0;
         let typeShakli = 0, typeIthbat = 0, typeWaqf = 0;
 
-        // حسابات صف رقم مسلسل
         let sSumShBase = (sVals.sh || []).reduce((a, b) => a + b, 0);
-        let sSumShCustom = (sVals.serialVals ? sVals.serialVals.customShVals : (sVals.customShVals || [])).reduce((a, b) => a + b, 0);
+        let sSumShCustom = (sVals.customShVals || []).reduce((a, b) => a + b, 0);
         let sSumShakliTotal = sSumShBase + sSumShCustom;
 
         let sSumIthBase = (sVals.ith || []).reduce((a, b) => a + b, 0);
@@ -485,7 +598,6 @@ function recalculateAll() {
         typeIthbat += sSumIthTotal;
         typeWaqf += sTotalWaqf;
 
-        // حسابات الصفوف الأخرى
         rows.forEach(row => {
             let sumShBase = row.sh.reduce((a, b) => a + b, 0);
             let sumShCustom = (row.customShVals || []).reduce((a, b) => a + b, 0);
@@ -533,7 +645,7 @@ function recalculateAll() {
             document.getElementById('d-tot-waqf').innerText = toArabicNumbers(typeWaqf);
 
             document.getElementById('tot-moqadam').innerText = toArabicNumbers(typeMoqadam);
-            document.getElementById('d-tot-moqadam').innerText = toArabicNumbers(typeMoqadam); // بدون كلمة مقدم
+            document.getElementById('d-tot-moqadam').innerText = toArabicNumbers(typeMoqadam);
         }
 
         overallMoqadam += typeMoqadam;
