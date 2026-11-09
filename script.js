@@ -167,6 +167,21 @@ function updateDropdownDynamicMenu() {
 
     dropdownList.innerHTML = htmlContent;
 }
+function removeCurrentPage() {
+    const basicTypes = ['جزئي', 'حكومة', 'مستعجل', 'تنفيذ'];
+    if (basicTypes.includes(currentType)) {
+        alert("لا يمكن حذف الأقسام الأساسية للنظام.");
+        return;
+    }
+    if (confirm(`هل أنت متأكد من إزالة التخصص الحالي (${dataStore[currentType].title || currentType})؟`)) {
+        delete dataStore[currentType];
+        saveData();
+        currentType = 'جزئي';
+        document.getElementById('menu-toggle').checked = false;
+        updateDropdownDynamicMenu();
+        renderTable();
+    }
+}
 // دالة العرض الرئيسية الشاملة للديسكتوب والموبايل
 function renderTable() {
     let section = dataStore[currentType];
