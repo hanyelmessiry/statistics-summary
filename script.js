@@ -195,6 +195,7 @@ function addNewCustomPage() {
         switchType(cleanName);
     }
 }
+
 function removeCurrentPage() {
     const basicTypes = ['جزئي', 'حكومة', 'مستعجل', 'تنفيذ'];
     if (basicTypes.includes(currentType)) {
