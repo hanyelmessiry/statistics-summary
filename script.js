@@ -167,6 +167,34 @@ function updateDropdownDynamicMenu() {
 
     dropdownList.innerHTML = htmlContent;
 }
+function addNewCustomPage() {
+    let pageName = prompt("أدخل اسم التخصص أو الصفحة الجديدة:", "تخصص جديد");
+    if (pageName !== null && pageName.trim() !== "") {
+        let cleanName = pageName.trim();
+        let section = dataStore[cleanName];
+        if (!section) {
+            dataStore[cleanName] = {
+                title: cleanName,
+                date: '',
+                customSh: [],
+                customIth: [],
+                customWaqf: [],
+                serialVals: {moajal:0, shatb:0, mawdoui:0, sh:[0,0,0,0], customShVals:[], ith:[0,0,0,0], customIthVals:[], waqf:0, customWaqfVals:[]},
+                rows: []
+            };
+        } else {
+            section.rows.push({ 
+                name: cleanName + ' (' + toArabicNumbers(section.rows.length + 1) + ')', 
+                moajal: 0, shatb: 0, mawdoui: 0, 
+                sh: [0, 0, 0, 0], customShVals: section.customSh.map(() => 0), 
+                ith: [0, 0, 0, 0], customIthVals: section.customIth.map(() => 0), 
+                waqf: 0, customWaqfVals: section.customWaqf.map(() => 0) 
+            });
+        }
+        saveData();
+        switchType(cleanName);
+    }
+}
 function removeCurrentPage() {
     const basicTypes = ['جزئي', 'حكومة', 'مستعجل', 'تنفيذ'];
     if (basicTypes.includes(currentType)) {
