@@ -568,8 +568,15 @@ const defaultData = {
 };
 
 let dataStore = JSON.parse(localStorage.getItem('court_stats_data_v17')) || defaultData;
-// اجعلها تقرأ من التخزين المحلي، وإذا لم تجد شيئاً تبدأ بـ 'جزئي'
 let currentType = localStorage.getItem('lastSelectedType') || 'جزئي';
+
+// 3. [هام جداً]: تنفيذ العرض وبدء التشغيل فور تحميل المستند لمنع اختفاء الجداول عند الريفريش
+document.addEventListener('DOMContentLoaded', () => {
+    // استدعاء دالة التبديل أو العرض بناءً على آخر صفحة تم حفظها
+    if (typeof switchType === 'function') {
+        switchType(currentType);
+    }
+});
 // ميزة تفريغ الخلية عند النقر وإعادة الصفر عند الخروج إذا تركت فارغة
 document.addEventListener('focus', function(e) {
     if (e.target && e.target.tagName === 'INPUT' && e.target.type === 'text') {
@@ -643,8 +650,8 @@ function renderFinalReportViewContent(container) {
         <div style="width: 100%; display: flex; flex-direction: column; gap: 25px;">
             
             <!-- 1. جدول الإجمالي العام لجميع التخصصات -->
-            <div style="background: #ffffff; border: 2px solid #0056b3; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <h3 style="color: #0056b3; margin-bottom: 12px; font-size: 16px; text-align: center;">📊 جدول الإجمالي العام الشامل</h3>
+            <div style="background: #ffffff; border: none solid #0056b3; border-radius: 8px; padding: 1px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h3 style="color: #0056b3; margin-bottom: 12px; font-size: 16px; text-align: center;">📊جدول الإجمالي العام الشامل</h3>
                 <div style="overflow-x: auto;">
                     <table class="desktop-table" style="width: 100%;">
                         <thead>
@@ -673,7 +680,7 @@ function renderFinalReportViewContent(container) {
             </div>
 
             <!-- 2. جدول التجميع الشامل للأعضاء (بالتقسيم الجديد المطلوب) -->
-            <div style="background: #ffffff; border: 2px solid #0056b3; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="background: #ffffff; border: none solid #0056b3; border-radius: 8px; padding: 1px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                 <h3 style="color: #0056b3; margin-bottom: 12px; font-size: 16px; text-align: center;">👥 جدول التجميع الشامل للأعضاء (التقسيم النهائي)</h3>
                 <div style="overflow-x: auto;">
                     <table class="desktop-table" style="width: 100%;">
@@ -708,7 +715,7 @@ function renderFinalReportViewContent(container) {
 
             <!-- 3. جدول بيان الجلسات المستقل لكل صف/نوع -->
             <div style="background: #ffffff; border: 2px solid #0056b3; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <h3 style="color: #0056b3; margin-bottom: 12px; font-size: 16px; text-align: center;">📅 جدول بيان عدد الجلسات لكل تخصص (التواريخ الفريدة)</h3>
+                <h3 style="color: #0056b3; margin-bottom: 12px; font-size: 16px; text-align: center;">📅عدد الجلسات</h3>
                 <div style="overflow-x: auto;">
                     <table class="desktop-table" style="width: 100%;">
                         <thead>
