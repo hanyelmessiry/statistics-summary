@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>الإدارات القضائية</title>
-    <link rel="stylesheet" href="style.css">
+    <title>الإحصائيات القضائية</title>
+    <link rel="stylesheet" href="stylo.css">
 </head>
 <body>
 
@@ -13,11 +13,11 @@
     <header>
         <label for="menu-toggle" class="open-btn" title="اختر النوع">&#9776;</label>
         <div class="header-title">
-            <span>نظام إحصاء القضايا</span>
+            <span> احصائيات المدني </span>
         </div>
         <div style="display: flex; gap: 4px;">
+            <button class="header-reset-btn" onclick= "manualSaveData()" title="حفظ بصيغة Excel">💾</button>
            <button class="header-reset-btn" onclick="exportToExcel()" title="حفظ بصيغة Excel">📊</button>
-           <button class="header-reset-btn" onclick="exportToWord()" title="حفظ بصيغة Word">📄</button>
            <button class="header-reset-btn" onclick="resetCurrentPage()" title="تصفير الأرقام">⟲</button>
            <button class="toggle-footer-btn" onclick="toggleFooter()" title="إخفاء الاجمالي">↕</button>
         </div>
@@ -36,6 +36,8 @@
     <div class="card">
         <div class="card-header-info">
             <h2 id="current-type-title">تفاصيل: المدني الجزئي</h2>
+            <!-- زر إضافة صف مخصص لشاشات الموبايل يظهر بجوار العنوان -->
+        <button onclick="addNewRow()" class="mobile-add-btn" style="display: none; background: #007bff; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-weight: bold; cursor: pointer;">+ صف جديد</button>
         </div>
 
         <div class="table-container">
@@ -43,67 +45,56 @@
                 <table class="desktop-table">
                     <thead>
                         <tr>
-                            <th rowspan="2" style="width: 45px;" title="إدراج صف جديد">
-                                <button class="add-row-icon-btn" onclick="addNewRow()" title="إدراج صف جديد">+</button>
+                            <!-- زر الإضافة (+) أصبح في الرأس أو بجوار التسميات -->
+                            <th rowspan="3" style="width: 45px;" title="إدراج صف جديد">
+                                <button class="add-row-icon-btn" onclick="addNewRow()">+</button>
                             </th>
-                            <th rowspan="2">مؤجل</th>
-                            <th rowspan="2">شطب</th>
-                            <th rowspan="2">موضوعي</th>
-                            <th colspan="4" id="shakli-header-container">
-                                شكلي
-                            </th>
-                            <th colspan="4" id="ithbat-header-container">
-                                إثبات
-                            </th>
-                            <th rowspan="2">وقف جزاء</th>
-                            <th rowspan="2" id="waqf-extra-container">
-                                <button class="add-col-btn" onclick="addCustomColumn('waqf')" title="إضافة عمود جديد" style="background: transparent; color: white; border: none; cursor: pointer; font-size: 16px;">+</button>
-                            </th>
+                            <th colspan="3">المؤجل</th>
+                            <th rowspan="3">شطب</th>
+                            <th rowspan="3">موضوعي</th>
+                            <th colspan="4">شكلي</th>
+                            <th colspan="4">إثبات</th>
+                            <th rowspan="3">فرعي</th>
+                            <th rowspan="3">صلح</th>
+                            <th rowspan="3">وقف جزاء</th>
                         </tr>
-                        <tr id="desktop-sub-header">
-                            <th>اختصاص</th>
-                            <th>قبول</th>
-                            <th>اعتبار</th>
-                            <th>
-                                تعليقي 
-                                <button class="add-col-btn" onclick="addCustomColumn('sh')" title="إضافة عمود شكلي" style="background: transparent; color: white; border: none; cursor: pointer; font-size: 14px; margin-right: 4px;">+</button>
-                            </th>
-                            <th>خبير</th>
-                            <th>تحقيق</th>
-                            <th>استجواب</th>
-                            <th>
-                                يمين 
-                                <button class="add-col-btn" onclick="addCustomColumn('ith')" title="إضافة عمود إثبات" style="background: transparent; color: white; border: none; cursor: pointer; font-size: 14px; margin-right: 4px;">+</button>
-                            </th>
+                        <tr>
+                            <th rowspan="2">المؤجل</th>
+                            <th rowspan="2">القديم</th>
+                            <th rowspan="2">المحجوز</th>
+                            <th rowspan="2">اختصاص</th>
+                            <th rowspan="2">عدم قبول</th>
+                            <th rowspan="2">وقف تعليق </th>
+                            <th rowspan="2">اعتبار</th>
+                            <th rowspan="2">خبير</th>
+                            <th rowspan="2">تحقيق</th>
+                            <th rowspan="2">استجواب</th>
+                            <th rowspan="2">يمين</th>
                         </tr>
+                        <tr></tr>
                     </thead>
                     <tbody id="desktop-table-body">
-                        <!-- صفوف البيانات -->
+                        <!-- صفوف البيانات والصف الأول القابل للتعديل -->
                     </tbody>
                     <tfoot>
-                        <!-- الصف الأول: رقم مسلسل (يقع فوق صف المجموع الكلي ويقبل إدخال الأرقام بحرية) -->
-                        <tr class="sub-total-row" id="desktop-serial-row">
-                            <td>رقم مسلسل</td>
-                            <!-- يتم توليد خلايا الإدخال هنا ديناميكياً عبر الجافاسكريبت -->
-                        </tr>
-                        
-                        <!-- الصف الثاني: المجموع الكلي (للقراءة فقط ومخصص لدالات الجمع التلقائي) -->
+                        <!-- المجموع الكلي -->
                         <tr class="total-row-card">
                             <td>المجموع الكلي</td>
-                            <td id="d-tot-moajal">٠</td>
+                            <td id="d-tot-moajal" colspan="3">٠</td>
                             <td id="d-tot-shatb">٠</td>
                             <td id="d-tot-mawdoui">٠</td>
                             <td id="d-tot-shakli" colspan="4">٠</td>
                             <td id="d-tot-ithbat" colspan="4">٠</td>
+                            <td id="d-tot-farai">٠</td>
+                            <td id="d-tot-solh">٠</td>
                             <td id="d-tot-waqf">٠</td>
-                            <td id="d-tot-moqadam" style="background-color: #e2e3e5; font-weight: bold;">مقدم: ٠</td>
+                            <td id="d-tot-moqadam">مقدم: ٠</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            <div id="vertical-records-container" class="vertical-card-container">
-            </div>
+            <div id="vertical-records-container" class="vertical-card-container"></div>
 
             <!-- جدول إجمالي النوع الحالي -->
             <div class="card-total-box">
@@ -112,28 +103,69 @@
                     <div class="record-item"><label>المؤجل</label><span id="tot-moajal">٠</span></div>
                     <div class="record-item"><label>الشطب</label><span id="tot-shatb">٠</span></div>
                     <div class="record-item"><label>موضوعي</label><span id="tot-mawdoui">٠</span></div>
-                    <div class="record-item"><label>شكلي (الإجمالي)</label><span id="tot-shakli">٠</span></div>
-                    <div class="record-item"><label>إثبات (الإجمالي)</label><span id="tot-ithbat">٠</span></div>
+                    <div class="record-item"><label>الشكلي</label><span id="tot-shakli">٠</span></div>
+                    <div class="record-item"><label>الإثبات</label><span id="tot-ithbat">٠</span></div>
+                    <div class="record-item"><label>فرعي</label><span id="tot-farai">٠</span></div>
+                    <div class="record-item"><label>صلح</label><span id="tot-solh">٠</span></div>
                     <div class="record-item"><label>وقف جزاء</label><span id="tot-waqf">٠</span></div>
-                    <div class="record-item full-width" style="background: #e2e3e5;"><label>المقدم</label><span id="tot-moqadam">٠</span></div>
+                    <div class="record-item full-width"><label>المقدم</label><span id="tot-moqadam">٠</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer id="main-footer">
+<footer id="main-footer">
+    <!-- جدول التجميع الشامل الخاص بتوزيع الأحكام (يظهر حصرياً في صفحة توزيع الأحكام) -->
+    <div id="distribution-footer-box" style="display: none; width: 100%;">
+        <div style="background: #ffffff; border: 2px solid #0056b3; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 2px solid #e9ecef; padding-bottom: 8px;">
+                <span style="font-weight: bold; color: #0056b3; font-size: 16px;">📊 جدول التجميع الشامل للأعضاء</span>
+            </div>
+            
+            <div class="table-container desktop-only-view" style="overflow-x: auto;">
+                <table class="desktop-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>محرر الأسباب</th>
+                            <th>موضوعي</th>
+                            <th>اختصاص</th>
+                            <th>عدم قبول</th>
+                            <th>عدم جواز</th>
+                            <th>اعتبار</th>
+                            <th>وقف تعليقي</th>
+                            <th>خبير</th>
+                            <th>تحقيق</th>
+                            <th>استجواب</th>
+                            <th>يمين</th>
+                            <th>فرعي</th>
+                            <th>صلح</th>
+                            <th>أخري</th>
+                        </tr>
+                    </thead>
+                    <tbody id="distribution-summary-body">
+                        <!-- تعبئة البيانات ديناميكياً من دالة recalculateDistributionTotals -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- جدول الإجمالي العام القديم (يظهر في باقي الصفحات العادية فقط) -->
+    <div id="standard-footer-box">
         <h4>الإجمالي العام</h4>
         <div class="footer-table-container">
             <table>
                 <thead>
                     <tr>
+                        <th rowspan="2">المقدم</th>
                         <th rowspan="2">المؤجل</th>
                         <th rowspan="2">الشطب</th>
                         <th rowspan="2">المحكوم فيه</th>
                         <th colspan="2">قطعي</th>
                         <th rowspan="2">إثبات</th>
+                        <th rowspan="2">فرعي</th>
+                        <th rowspan="2">صلح</th>
                         <th rowspan="2">وقف جزاء</th>
-                        <th rowspan="2">المقدم</th>
                     </tr>
                     <tr>
                         <th>موضوعي</th>
@@ -142,14 +174,16 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td id="f-moqadam" rowspan="2" style="background: #e2e3e5;">٠</td>
                         <td id="f-moajal" rowspan="2">٠</td>
                         <td id="f-shatb" rowspan="2">٠</td>
                         <td id="f-mahkoum" rowspan="2">٠</td>
                         <td id="f-mawdoui">٠</td>
                         <td id="f-shakli">٠</td>
                         <td id="f-ithbat" rowspan="2">٠</td>
+                        <td id="f-farai" rowspan="2">٠</td>
+                        <td id="f-solh" rowspan="2">٠</td>
                         <td id="f-waqf" rowspan="2">٠</td>
-                        <td id="f-moqadam" rowspan="2" style="background: #e2e3e5;">٠</td>
                     </tr>
                     <tr>
                         <td id="f-qatai-sub" colspan="2">٠</td>
@@ -157,7 +191,8 @@
                 </tbody>
             </table>
         </div>
-    </footer>
-    <script src="script.js"></script>
+    </div>
+</footer>
+    <script src="scripto.js"></script>
 </body>
 </html>
