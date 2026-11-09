@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #808080;
+    background-color: #ffffff;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -20,11 +20,11 @@ body {
     display: none;
 }
 
-header, .dropdown-menu, footer {
+header, .dropdown-menu {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 10px); /* تم تصحيح الخطأ وإضافة علامة الطرح */
+    width: calc(100% - 10px);
     max-width: 950px;
 }
 
@@ -56,7 +56,7 @@ header {
 }
 
 .open-btn:hover, .toggle-footer-btn:hover, .header-reset-btn:hover {
-    transform: scale(1.2); /* تم ضبط النسبة لتكون 1.2 بدلاً من 1.4 الكبيرة جداً */
+    transform: scale(1.2);
 }
 
 .header-title {
@@ -103,25 +103,13 @@ header {
     align-items: center;
     justify-content: space-between;
     transition: all 0.2s ease;
-    transform: scale(1);
-    transform-origin: right center;
 }
 
 .dropdown-content li button:hover, 
-.dropdown-content li button:active,
-.dropdown-content li button.active,
-.dropdown-content li .dropdown-action-btn:hover,
-.dropdown-content li .dropdown-action-btn:active {
+.dropdown-content li .dropdown-action-btn:hover {
     background-color: rgba(255, 255, 255, 0.35) !important;
-    transform: scale(1.3);
     font-weight: bold;
     border-radius: 6px;
-}
-
-.reset-all-btn {
-    color: #890303 !important;
-    border-top: 1px solid rgba(255,255,255,0.2) !important;
-    font-weight: bold;
 }
 
 .overlay {
@@ -149,12 +137,9 @@ header {
 }
 
 .card {
-    background-color: #ffffff;
     width: 100%;
     max-width: 950px;
     padding: 10px 8px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -167,7 +152,7 @@ header {
     width: 100%;
     margin-bottom: 8px;
     align-items: center;
-    border-bottom: 2px solid #007bff;
+    border-bottom: 2px solid #00a6ff;
     padding-bottom: 4px;
 }
 
@@ -176,41 +161,11 @@ header {
     color: #007bff;
 }
 
-.add-row-icon-btn {
-    background: transparent;
-    border: 1px solid #007bff;
-    color: #007bff;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.add-row-icon-btn:hover {
-    background: #007bff;
-    color: white;
-}
-
-.delete-row-btn {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 2px 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: bold;
-}
-
 .table-container {
     width: 100%;
     overflow-x: auto;
+    overflow-y: visible !important; /* السماح للعناصر بالظهور رأسياً خارج الحاوية */
+    padding-right: 35px;            /* ترك مساحة فارغة على اليمين ليظهر فيها زر الحذف */
 }
 
 .desktop-table {
@@ -249,98 +204,59 @@ header {
     font-weight: bold;
 }
 
-.desktop-table input.c-moqadam {
-    background-color: #e2e3e5 !important;
-}
-
 .total-row-card td {
     background: linear-gradient(180deg, #e6f0ff, #cce0ff) !important;
     border: 2px solid #007bff !important;
     color: #0056b3;
 }
 
-.vertical-card-container {
-    display: none;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-}
-
-.record-card {
-    background: #f8f9fa;
-    border: 2px solid #b0c4de;
-    border-radius: 8px;
-    padding: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.record-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    color: #0056b3;
-    margin-bottom: 6px;
-    font-size: 12px;
-    border-bottom: 1px solid #dcdcdc;
-    padding-bottom: 3px;
-}
-
-.record-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
-}
-
-.record-item {
-    background: #ffffff;
-    border: 1px solid #d0d7de;
-    border-radius: 4px;
-    padding: 3px 6px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.record-item.full-width {
-    grid-column: span 2;
-}
-
-.record-item label {
-    font-size: 10px;
-    color: #495057;
-    margin-bottom: 1px;
-    font-weight: bold;
-}
-
-.record-item input, .record-item span {
-    font-size: 12px;
-    font-weight: bold;
-    text-align: center;
-    color: #000;
-    width: 100%;
-    border: none;
-    background: transparent;
-    outline: none;
-}
-
-.record-item input {
-    border-bottom: 1px dashed #007bff;
-}
-
-.record-item input.c-moqadam, .record-item span.c-moqadam {
-    background-color: #e2e3e5 !important;
-    border-radius: 3px;
-    padding: 2px;
-}
-
+/* جدول إجمالي النوع الحالي: بعرض نصف الجدول الأساسي ومتوسط */
 .card-total-box {
+    display: block;
+    margin: 15px auto 0 auto;
     background: linear-gradient(135deg, #e6f0ff, #cce0ff);
     border: 2px solid #007bff;
     border-radius: 8px;
     padding: 6px 8px;
-    margin-top: 8px;
-    width: 100%;
+    width: 50% !important;
+    min-width: 300px;
+    box-sizing: border-box;
+}
+
+.card-total-box .record-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.card-total-box .record-item {
+    padding: 3px 6px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-total-box .record-item.full-width {
+    grid-column: span 4;
+}
+
+.card-total-box .record-item label {
+    font-size: 10px;
+    color: #1b75d6;
+    font-weight: bold;
+    flex: 1;
+}
+
+.card-total-box .record-item span {
+    flex: 1;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 3px;
 }
 
 .card-total-title {
@@ -353,36 +269,33 @@ header {
     padding-bottom: 2px;
 }
 
-@media (max-width: 768px) {
-    .desktop-table-wrapper {
-        display: none;
-    }
-    .vertical-card-container {
-        display: flex;
-    }
-}
-
-footer {
-    bottom: 5px;
+/* جدول الإجمالي العام (الفوتر): نفس عرض جدول إجمالي النوع الحالي تماماً (ثلث الشاشة) */
+#main-footer {
+    position: fixed;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 33.333% !important;
+    min-width: 300px;
     background: linear-gradient(135deg, #007bff, #004085);
     color: #ffffff;
-    padding: 6px;
+    padding: 1vh 1vw;
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     z-index: 1000;
     transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-footer.hidden {
+#main-footer.hidden {
     transform: translate(-50%, 180%);
     opacity: 0;
     pointer-events: none;
 }
 
-footer h4 {
+#main-footer h4 {
     text-align: center;
     margin-bottom: 2px;
-    font-size: 9px;
+    font-size: 13px;
 }
 
 .footer-table-container {
@@ -390,30 +303,526 @@ footer h4 {
     overflow-x: auto;
 }
 
-footer table {
+#main-footer table {
     width: 100%;
-    min-width: 550px;
+    min-width: unset;
     border-collapse: collapse;
     text-align: center;
-    font-size: 10px;
+    font-size: 9px;
     background-color: #ffffff;
     color: #000000;
     border-radius: 6px;
     overflow: hidden;
 }
 
-footer table, footer th, footer td {
-    border: 1px solid #333333;
+#main-footer table, #main-footer th, #main-footer td {
+    border: 1px solid #1a7b9e;
     font-weight: bold;
 }
 
-footer th {
+#main-footer th {
     background-color: #007bff;
     color: #ffffff;
-    padding: 4px 2px;
+    padding: 3px 1px;
 }
 
-footer td {
-    padding: 4px 2px;
+#main-footer td {
+    padding: 3px 1px;
     background-color: #ffffff;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: normal !important;
+}
+
+body {
+    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 70px 5px 140px 5px;
+    overflow-x: hidden;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+header, .dropdown-menu {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 10px);
+    max-width: 950px;
+}
+
+header {
+    top: 5px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.open-btn, .toggle-footer-btn, .header-reset-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.open-btn:hover, .toggle-footer-btn:hover, .header-reset-btn:hover {
+    transform: scale(1.2);
+}
+
+.header-title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    top: 55px;
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.dropdown-content {
+    position: absolute;
+    right: 0;
+    width: 240px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    padding: 6px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.dropdown-content ul {
+    list-style: none;
+}
+
+.dropdown-content li button, 
+.dropdown-content li .dropdown-action-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    text-align: right;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.dropdown-content li button:hover, 
+.dropdown-content li .dropdown-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.35) !important;
+    font-weight: bold;
+    border-radius: 6px;
+    transform: scale(1.2);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+    z-index: 1500;
+}
+
+#menu-toggle:checked ~ .dropdown-menu .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#menu-toggle:checked ~ .overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.card {
+    width: 100%;
+    max-width: 950px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 8px;
+    align-items: center;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 4px;
+}
+
+.card-header-info h2 {
+    font-size: 15px;
+    color: #007bff;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.desktop-table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 11px;
+}
+
+.desktop-table th, .desktop-table td {
+    border: 1px solid #b0c4de;
+    padding: 4px 2px;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.desktop-table th {
+    background: linear-gradient(180deg, #1e88e5, #0056b3);
+    color: #ffffff;
+}
+
+.desktop-table td {
+    background-color: #ffffff;
+    color: #000;
+}
+.add-row-icon-btn {
+    border: none;
+    background: transparent;
+    color: #ffffff;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s, color 0.3s;
+}
+.add-row-icon-btn:hover {
+    transform: scale(1.5);
+}
+
+.delete-row-btn {
+    background: transparent;
+    color: red;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transform: translateY(-25%)
+}
+.delete-row-btn:hover {
+    font-weight: bold;
+    }
+    /* تنسيق يضيء الـ input عند تمرير الماوس على زر الحذف الخاص به */
+
+tr:has(.delete-row-btn:hover) input {
+    color: whitesmoke;
+    
+    background-color: rgb(154, 8, 8);
+}
+/* تنسيق مربعات الإدخال في جدول الديسكتوب */
+
+.desktop-table input:focus {
+    background-color: rgba(0, 123, 255, 0.25) !important;
+    border-color: #004085 !important;
+    box-shadow: 0 0 8px rgba(0, 64, 133, 0.4);
+    color: #ffffff !important;
+}
+
+.total-row-card td {
+    background: linear-gradient(180deg, #e6f0ff, #cce0ff) !important;
+    border: 2px solid #007bff !important;
+    color: #0056b3;
+}
+
+/* جدول إجمالي النوع الحالي: بعرض 50% وفي منتصف الصفحة */
+.card-total-box {
+    display: block;
+    margin: 15px auto 0 auto;
+    background: linear-gradient(135deg, #e6f0ff, #cce0ff);
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    padding: 6px 8px;
+    width: 50% !important;
+    min-width: 320px;
+    box-sizing: border-box;
+}
+
+.card-total-box .record-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.card-total-box .record-item {
+    padding: 3px 6px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-total-box .record-item.full-width {
+    grid-column: span 4;
+}
+
+.card-total-box .record-item label {
+    font-size: 10px;
+    color: #1b75d6;
+    font-weight: bold;
+    flex: 1;
+}
+
+.card-total-box .record-item span {
+    flex: 1;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+.card-total-title {
+    font-weight: bold;
+    color: #0056b3;
+    font-size: 12px;
+    margin-bottom: 4px;
+    text-align: center;
+    border-bottom: 1px solid #b0c4de;
+    padding-bottom: 2px;
+}
+
+/* جدول الإجمالي العام (الفوتر) */
+#main-footer {
+    position: fixed;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60% !important;
+    min-width: 320px;
+    background: linear-gradient(135deg, #007bff, #004085);
+    color: #ffffff;
+    padding: 1vh 1vw;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+#main-footer.hidden {
+    transform: translate(-50%, 180%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+#main-footer h4 {
+    text-align: center;
+    margin-bottom: 2px;
+    font-size: 13px;
+}
+
+.footer-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#main-footer table {
+    width: 100%;
+    min-width: unset;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 9px;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+#main-footer table, #main-footer th, #main-footer td {
+    border: 1px solid #1a7b9e;
+    font-weight: bold;
+}
+
+#main-footer th {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 3px 1px;
+}
+
+#main-footer td {
+    padding: 3px 1px;
+    background-color: #ffffff;
+}
+
+/* افتراضياً (على الديسكتوب): إخفاء حاوية بطاقات الموبايل تماماً */
+#vertical-records-container {
+    display: none !important;
+}
+
+/* ========================================================
+   تنسيق شاشات الموبايل (Vertical Cards) - تعمل فقط عند الهواتف
+   ======================================================== */
+@media (max-width: 768px) {
+    .desktop-table-wrapper {
+        display: none !important;
+    }
+
+    #vertical-records-container {
+        display: flex !important;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        padding: 5px;
+    }
+
+    .mobile-card {
+        background: #f8f9fa;
+        border: 2px solid #007bff;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .mobile-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        color: #0056b3;
+        margin-bottom: 8px;
+        font-size: 13px;
+        border-bottom: 1px solid #b0c4de;
+        padding-bottom: 4px;
+    }
+
+    .mobile-card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+
+    .mobile-card-item {
+        background: #ffffff;
+        border: 1px solid #b0c4de;
+        border-radius: 6px;
+        padding: 6px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    .mobile-card-item.full-width {
+        grid-column: span 3;
+    }
+
+    .mobile-card-item label {
+        font-size: 11px;
+        color: #0056b3;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .mobile-card-item input {
+        width: 65px !important;
+        font-size: 13px;
+        font-weight: bold;
+        text-align: center;
+        background-color: rgba(0, 123, 255, 0.15) !important;
+        border: 2px solid rgba(0, 123, 255, 0.4) !important;
+        border-radius: 6px;
+        color: black !important;
+        padding: 4px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-card-item input:focus {
+        background-color: rgba(0, 123, 255, 0.3) !important;
+        border-color: #004085 !important;
+        box-shadow: 0 0 6px rgba(0, 64, 133, 0.4);
+        color: #1a1919 !important;
+    }
+
+    .card-total-box, #main-footer {
+        width: 95% !important;
+        min-width: unset !important;
+    }
+    .mobile-add-btn {
+        display: inline-block !important;
+        font-size: 12px;
+    }
+
+    /* إخفاء جدول الديسكتوب الأفقي لتوزيع الأحكام على الهواتف */
+    #distribution-view-container .desktop-only-view {
+        display: none !important;
+    }
+
+    /* إظهار بطاقات الموبايل الرأسية لتوزيع الأحكام على الهواتف */
+    #distribution-view-container .mobile-only-view {
+        display: flex !important;
+        flex-direction: column;
+        gap: 10px;
+    }
+    #distribution-view-container .mobile-card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 6px;
+    }
+
+    /* جعل عناصر البطاقة تتناسب مع العرض الجديد */
+    #distribution-view-container .mobile-card-item {
+        flex-direction: column !important; /* ترتيب التسمية فوق خانة الإدخال لتناسب المساحة الضيقة */
+        align-items: center !important;
+        text-align: center;
+        padding: 4px;
+    }
+
+    /* تصغير حجم خط التسمية وخانة الإدخال قليلاً لتستوعبها الثلاثة أعمدة براحة */
+    #distribution-view-container .mobile-card-item label {
+        font-size: 10px !important;
+    }
+
+    #distribution-view-container .mobile-card-item input {
+        width: 100% !important;
+    }
 }
